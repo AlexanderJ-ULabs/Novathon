@@ -1,70 +1,318 @@
-﻿<!DOCTYPE html>
+﻿
+
+@using Microsoft.EntityFrameworkCore
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    string userId = UserManager.GetUserId(User);
+
+    var appUser = await UserManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+    var pic = "";
+    pic = appUser != null && appUser.UserPhoto?.Length > 0 ? Convert.ToBase64String(appUser.UserPhoto) : "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";
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - GeneralDynamic.Web</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/favicon.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>GateKeeper Enterprise</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+
+    <noscript> JavaScript is disabled in your browser. Please enable JavaScript to view the GateKeeper Server </noscript>
+
+
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+
+        <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/css/material-dashboard.css" rel="stylesheet" />
+        <link href="~/css/font-awesome.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="~/css/site.css" rel="stylesheet" />
+        <link href="~/css/animate.css" rel="stylesheet" />
+        <link href="~/css/protip.min.css" rel="stylesheet" />
+        <link href="~/css/bootstrap-switch.min.css" rel="stylesheet" />
+
+
+        <script src="~/js/jquery-3.2.1.min.js" type="text/javascript"></script>
     </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    <environment include="Production">
+
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GeneralDynamic.Web</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+    <div class="loader"></div>
+
+
+    <div class="wrapper">
+        <div class="sidebar" data-active-color="blue" data-background-color="red" data-image="/images/sidebar-1.png">
+
+            <!--
+            Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+            Tip 2: you can also add an image using data-image tag
+            Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+            -->
+
+
+
+
+
+
+            <a asp-area="" asp-controller="Pages" asp-action="Dashboard" class="simple-text logo-mini">
+
+                <div class="logo">
+
+
+                    <div class="text-Logo">
+                        <div id="LogoMini">
+                            <img src="~/images/LogoMini.png" style="border-radius:5px;" />
+                        </div>
+                       
+                        <span class="letter" data-letter="G">G</span>
+                        <span class="letter" data-letter="E">E</span>
+                        <span class="letter" data-letter="N">N</span>
+                        <span class="letter" data-letter="E">E</span>
+                        <span class="letter" data-letter="R">R</span>
+                        <span class="letter" data-letter="A">A</span>
+                        <span class="letter" data-letter="L">L</span>
+                       
+                        <br />
+                        <span class="letter" data-letter="D">D</span>
+                        <span class="letter" data-letter="Y">Y</span>
+                        <span class="letter" data-letter="N">N</span>
+                        <span class="letter" data-letter="A">A</span>
+                        <span class="letter" data-letter="M">M</span>
+                        <span class="letter" data-letter="I">I</span>
+                        <span class="letter" data-letter="C">C</span>
+                        <span class="letter" data-letter="S">S</span>
+                       
+
+                    </div>
+
+                </div>
+            </a>
+            <div class="sidebar-wrapper">
+                <div class="user">
+                    <div class="photo">
+                        <img src="data:image/png;base64,@pic" />
+
+
+
+                    </div>
+                    <div class="info">
+                        <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                            <span>
+                                @UserManager.GetUserName(User)
+                                <b class="caret"></b>
+                            </span>
+                        </a>
+                        <div class="clearfix"></div>
+                        <div class="collapse" id="collapseExample">
+                            <ul class="nav">
+                                <li>
+                                    <a asp-area="" asp-controller="Manage" asp-action="Index">
+                                        <span class="sidebar-mini"> MP </span>
+                                        <span class="sidebar-normal"> My Profile </span>
+                                    </a>
+                                </li>
+                                @*<li>
+                                        <a href="#">
+                                            <span class="sidebar-mini"> EP </span>
+                                            <span class="sidebar-normal"> Edit Profile </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="sidebar-mini"> S </span>
+                                            <span class="sidebar-normal"> Settings </span>
+                                        </a>
+                                    </li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav">
+                    <li class="">
+                        <a asp-area="" asp-controller="Pages" asp-action="Dashboard">
+                            <i class="material-icons">dashboard</i>
+                            <p> Dashboard </p>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a asp-area="" asp-controller="Pages" asp-action="Signatures">
+                            <i class="fa fa-pencil"></i>
+                            <p>Signatures</p>
+                        </a>
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - GeneralDynamic.Web</p>
-        </footer>
+        <div class="main-panel">
+            <nav class="navbar navbar-transparent navbar-absolute">
+                <div class="container-fluid">
+                    <div class="navbar-minimize">
+                        <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                            <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                            <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                        </button>
+                    </div>
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <span class="navbar-brand page-title"></span>
+                    </div>
+                    @await Html.PartialAsync("_LoginPartial")
+
+                </div>
+            </nav>
+
+
+
+
+            <div class="content">
+
+                @RenderBody()
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <a asp-controller="Pages" asp-action="Dashboard">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="https://www.gd.com/" target="_blank">Company</a>
+                            </li>
+                            <li>
+                                <a href="mailto:support@example.com"><p>Support</p> </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <p class="copyright pull-right">
+                        © @DateTime.Now.Year  <a href="https://www.gd.com/" target="_blank"> General Dynamics Corporation</a>
+                    </p>
+                </div>
+            </footer>
+        </div>
     </div>
 
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        <!--   Core JS Files   -->
+
+        <script src="~/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="~/js/material.min.js" type="text/javascript"></script>
+
+        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
+
+        <script src="~/js/core.js"></script>
+        <!-- Library for adding dinamically elements -->
+        <script src="~/js/arrive.min.js" type="text/javascript"></script>
+        <!-- Forms Validations Plugin -->
+        <script src="~/js/jquery.validate.min.js"></script>
+        <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+        <script src="~/js/moment.min.js"></script>
+
+        <!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+        <script src="~/js/jquery.bootstrap-wizard.js"></script>
+        <!--  Notifications Plugin, full documentation here: http://bootstrap-notify.remabledesigns.com/    -->
+        <script src="~/js/bootstrap-notify.js"></script>
+        <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+        <script src="~/js/bootstrap-datetimepicker.js"></script>
+        <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
+        <script src="~/js/jquery-jvectormap.js"></script>
+        <!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
+        <script src="~/js/nouislider.min.js"></script>
+
+
+        <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+        <script src="~/js/jquery.select-bootstrap.js"></script>
+        <!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+        <script src="~/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+
+        <!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
+        <script src="~/js/sweetalert2.js"></script>
+        <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+        <script src="~/js/jasny-bootstrap.min.js"></script>
+        <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+        <script src="~/js/fullcalendar.min.js"></script>
+
+
+        <script src="~/js/jquery.tagsinput.js"></script>
+        <!-- Material Dashboard javascript methods -->
+        <script src="~/js/material-dashboard.js?v=1.2.1"></script>
+        <!-- Material Dashboard DEMO methods, don't include it in your project! -->
+        @*<script src="~/js/demo.js"></script>*@
+        <script src="~/js/site.js"></script>
+
+        <script src="~/Server-Scripts/DataService.js"></script>
+
+        <script src="~/js/highcharts.js"></script>
+        <script src="~/js/exporting.js"></script>
+
+        <script src="~/js/dataTables.buttons.min.js"></script>
+        <script src="~/js/buttons.html5.min.js"></script>
+
+        <script src="~/js/dataTables.responsive.min.js"></script>
+
+
+        <script src="~/js/jszip.min.js"></script>
+
+
+
+
+
+        <script src="~/js/bootstrap-switch.min.js"></script>
+        <script src="~/js/protip.min.js"></script>
+
+        <script type="text/javascript">
+            $(window).on('load', function () { $(".loader").fadeOut("slow"); });
+            $.protip({
+                defaults: {
+                    scheme: 'aqua',
+                    trigger: 'hover',
+                    animate: 'bounceInDown',
+                    icon: 'help-circled'
+                }
+
+
+
+            });
+
+        </script>
+
+
     </environment>
     <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     </environment>
 
     @RenderSection("Scripts", required: false)

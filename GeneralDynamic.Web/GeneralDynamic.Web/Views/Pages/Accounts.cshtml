@@ -1,0 +1,297 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+@model RegisterViewModel
+
+<script src="~/Server-Scripts/Accounts.js"></script>
+
+<div class="container-fluid">
+
+
+
+    <section class="gk-section-block">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="orange">
+                        <i class="fa fa-users fa-2x"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">
+                            Users
+                        </span>
+                        <div class="toolbar">
+                            <!--        Here you can write extra buttons/actions for the toolbar              -->
+                        </div>
+                        <div class="material-datatables">
+                            <table class="table table-striped table-no-bordered table-hover  tblServerUsers" cellspacing="0" width="100%" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Name</th>
+                                        <th>Added on</th>
+                                        <th>Phone</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+
+
+                <div class="input-group image-preview">
+
+                    <span class="input-group-btn">
+
+
+                        <button type="button" class="btn btn-labeled btn-info  pull-right add-user" data-toggle="modal" data-target="#AddUserModel"><i class="fa fa-2x">&#xf234;</i> Add</button>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="AddUserModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+
+            </div>
+            <div class="modal-body">
+                <!--      Wizard container        -->
+                <div class="wizard-container">
+                    <div class="card wizard-card active" data-color="blue" id="wizardProfile">
+                        <form id="UserRegistrationForm" enctype="multipart/form-data">
+                            <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+                            <div class="wizard-header">
+                                <h3 class="wizard-title">
+                                    Register New User
+                                </h3>
+                            </div>
+                            <div class="wizard-navigation">
+                                <ul class="nav nav-pills">
+                                    <li class="active" style="width: 50%;">
+                                        <a href="#about" data-toggle="tab" aria-expanded="true">Registration Form</a>
+                                    </li>
+                                </ul>
+                                <div class="moving-tab" style="width: 50%; transform: translate3d(-8px, 0px, 0px); transition: transform 0s;">Registration Form</div>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="Registration">
+
+                                    <div class="row">
+
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-at "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">
+                                                        Email
+                                                        <small>(required)</small>
+                                                    </label>
+                                                    <input asp-for="Email" type="email" id="Email" required name="Email" class="form-control">
+                                                    @*<span asp-validation-for="Email" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-user "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">
+                                                        Full Name
+                                                        <small>(required)</small>
+                                                    </label>
+                                                    <input asp-for="FullName" required name="FullName" id="FullName" type="text" class="form-control">
+                                                    @*<span asp-validation-for="FullName" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-phone "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">
+                                                        Phone Number
+                                                        <small>(optional)</small>
+                                                    </label>
+                                                    <input asp-for="PhoneNumber" name="PhoneNumber" id="PhoneNumber" type="text" class="form-control">
+                                                    @*<span asp-validation-for="PhoneNumber" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-pencil "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">
+                                                        Choose a secret
+                                                        <small>(Required)</small>
+                                                    </label>
+                                                    <input asp-for="Secret" required name="Secret" id="Secret" type="password" class="form-control">
+                                                    @*<span asp-validation-for="Secret" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-user  "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">
+                                                        Choose Username
+                                                        <small>(required)</small>
+                                                    </label>
+                                                    <input asp-for="UserName" required name="UserName" id="UserName" type="text" class="form-control">
+                                                    @*<span asp-validation-for="UserName" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="col-md-6">
+
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-key  "></i>
+                                                </span>
+                                                <div class="form-group label-floating ">
+                                                    <label class="control-label">
+                                                        Password
+                                                        <small>(required)</small>
+                                                    </label>
+                                                    <input asp-for="Password" required name="Password" id="Password" type="password" class="form-control">
+                                                    @*<span asp-validation-for="Password" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-key "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <label class="control-label">
+                                                        Confirm Password
+                                                        <small>(required)</small>
+                                                    </label>
+                                                    <input asp-for="ConfirmPassword" required id="ConfirmPassword" name="ConfirmPassword" type="password" class="form-control" aria-required="true">
+                                                    @*<span asp-validation-for="ConfirmPassword" class="text-danger"></span>*@
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-key "></i>
+                                                </span>
+                                                <div class="form-group label-floating">
+                                                    <select type="text" id="GkRole" required name="GkRole" class="form-control">
+
+                                                        <option value="User" selected>User (Limited Access)</option>
+                                                        <option value="Administrator">Administrator (Full Access)</option>
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 ">
+                                            <button type="button" id="RegisterServerUser" class="btn btn-info pull-right register-Server-User">Save</button>
+                                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- wizard container -->
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    $('.page-title').text("Accounts");
+</script>

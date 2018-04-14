@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+<script src="~/Server-Scripts/Signatures.js"></script>
+
+<div class="container-fluid">
+    <section class="gk-section-block">
+        <div class="row">
+
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="orange">
+                        <i class="fa  fa-calendar-times-o fa-2x"></i>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-title">
+                            Signatures
+
+                        </span>
+
+                        <div class="toolbar">
+                            <div class='right-inner-addon pull-right'>
+                                <i class="fa fa-search"></i>
+                                <input name='txtSignatureSearch' id="txtSignatureSearch" placeholder="Signature Search" type="text" class="form-control " />
+
+                            </div>
+                        </div>
+                        <div class="material-datatables">
+                            <table class="table table-striped table-no-bordered table-hover" id="SignatureTable" cellspacing="0" width="100%" style="width:100%">
+                                <thead>
+                                    <tr>
+
+                                        <th>Date</th>
+                                        <th>Machine</th>
+                                        <th>User</th>
+                                        <th>Credential</th>
+                                        <th>Device</th>
+                                        <th>Event</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- end content-->
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+            </div>
+        </div>
+
+
+    </section>
+</div>
+
+
+
+
+<script>
+
+    $('.page-title').text("Signatures");
+</script>

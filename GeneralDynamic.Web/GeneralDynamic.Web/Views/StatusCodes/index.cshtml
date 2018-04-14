@@ -1,0 +1,80 @@
+
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model int
+@{
+
+    var statusCode = Model;
+
+    var statusmessage = "";
+
+    switch (statusCode)
+
+    {
+
+        case 400:
+
+            statusmessage = "Bad request: The request cannot be fulfilled due to bad syntax";
+
+            break;
+        case 401:
+
+            statusmessage = "Unauthorized Access. You cannot access this resource. Return...";
+
+            break;
+
+        case 403:
+
+            statusmessage = "Looks like you don't have access to this resource";
+
+            break;
+
+        case 404:
+
+            statusmessage = "Sorry, couldn't find what you were looking for.";
+
+            break;
+
+        case 408:
+
+            statusmessage = "The server timed out waiting for the request";
+
+            break;
+
+        case 500:
+
+            statusmessage = "Something unexpected happened. Please contact your administrator, if the problem continues to occur. Thank you";
+
+            break;
+
+
+        default:
+
+            statusmessage = "Likely to be a database issue. Please contact your administrator, Thank you";
+
+            break;
+    }
+
+}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="red">
+                    <i class="fa fa-frown-o fa-3x"></i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">@statusmessage</h4>
+                    <div class="form-group">
+
+                        <span class="material-input"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

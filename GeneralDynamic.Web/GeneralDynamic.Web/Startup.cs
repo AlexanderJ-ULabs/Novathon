@@ -52,7 +52,7 @@ namespace GeneralDynamic.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseStatusCodePagesWithReExecute("/StatusCodes/{0}");
             app.UseStaticFiles();
 
             app.UseAuthentication();
@@ -61,7 +61,7 @@ namespace GeneralDynamic.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Pages}/{action=Dashboard}/{id?}");
             });
         }
     }

@@ -8,9 +8,9 @@ namespace GeneralDynamic.Web.Models.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Username is required")]
+
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

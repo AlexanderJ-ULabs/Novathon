@@ -1,35 +1,232 @@
 ﻿@model RegisterViewModel
+
 @{
     ViewData["Title"] = "Register";
 }
+@{
 
-<h2>@ViewData["Title"]</h2>
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+}
+
+
+<div class="container-fluid">
+    <div class="col-sm-8 col-sm-offset-2">
+        <!--      Wizard container        -->
+        <div class="wizard-container">
+            <div class="card wizard-card active" data-color="blue" id="wizardProfile">
+                <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+                    <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+                    <div class="wizard-header">
+                        <h3 class="wizard-title">
+                            General Dynamics
+                        </h3>
+                        <h5>Use the form below to register.</h5>
+                    </div>
+                    <div class="wizard-navigation">
+                        <ul class="nav nav-pills">
+                            <li class="active" style="width: 50%;">
+                                <a href="#about" data-toggle="tab" aria-expanded="true">Registration Form</a>
+                            </li>
+
+                        </ul>
+                        <div class="moving-tab" style="width: 50%; transform: translate3d(-8px, 0px, 0px); transition: transform 0s;">Registration Form</div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Registration">
+                            <div class="row">
+
+                                <div class="col-sm-4 col-sm-offset-1">
+                                    <div class="picture-container">
+                                        <div class="picture">
+                                            <img src="~/images/default-avatar.png" class="picture-src" id="wizardPicturePreview" title="">
+                                            <input type="file" id="wizard-picture" name="UserPhoto" accept=".png,.jpg,.jpeg">
+                                        </div>
+                                        <h6>Choose Picture</h6>
+                                    </div>
+                                </div>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="col-sm-6">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-at  "></i>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Email
+                                                <small>(required)</small>
+                                            </label>
+                                            <input asp-for="Email" type="text" name="email" class="form-control">
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa  fa-user "></i>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Full Name
+                                                <small>(required)</small>
+                                            </label>
+                                            <input asp-for="FullName" name="fullName" type="text" class="form-control">
+                                            <span asp-validation-for="FullName" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-phone  "></i>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Phone Number
+                                                <small>(optional)</small>
+                                            </label>
+                                            <input asp-for="PhoneNumber" name="phone" type="text" class="form-control">
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-pencil  "></i>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Choose a secret
+                                                <small>(Required)</small>
+                                            </label>
+                                            <input asp-for="Secret" name="secret" type="password" class="form-control error">
+                                            <span asp-validation-for="Secret" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-user  "></i>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Choose Username
+                                                <small>(required)</small>
+                                            </label>
+                                            <input asp-for="UserName" name="userName" type="text" class="form-control">
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-key "></i>
+                                        </span>
+                                        <div class="form-group label-floating ">
+                                            <label class="control-label">
+                                                Password
+                                                <small>(required)</small>
+                                            </label>
+                                            <input asp-for="Password" name="password" type="password" class="form-control">
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-key  "></i>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Confirm Password
+                                                <small>(required)</small>
+                                            </label>
+                                            <input asp-for="ConfirmPassword" name="confirmPassword" type="password" class="form-control" aria-required="true">
+                                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="wizard-footer">
+                        <div class="pull-right">
+
+                            <button type="submit" class="btn  btn-info">Submit</button>
+                        </div>
+                        <div class="pull-left">
+                            <a class="btn btn-rose" asp-action="Login"
+                               asp-route-returnurl="@ViewData["ReturnUrl"]">Login</a>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-default">Register</button>
-        </form>
+        </div>
+        <!-- wizard container -->
     </div>
 </div>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $("#wizard-picture").change(function() {
+        readURL(this);
+    });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+
+
+
+
+
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
